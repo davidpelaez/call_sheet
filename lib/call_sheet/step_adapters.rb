@@ -1,25 +1,12 @@
-require "forwardable"
+require "dry-container"
 
 module CallSheet
-  module StepAdapters
-    @registry = {}
-
-    class << self
-      attr_reader :registry
-      private :registry
-
-      extend Forwardable
-      def_delegators :registry, :[], :each
-
-      # Register a step adapter.
-      #
-      # @param [Symbol] name the name to expose for adding steps to a transaction
-      # @param klass the step adapter class
-      #
-      # @api public
-      def register(name, klass)
-        registry[name.to_sym] = klass
-      end
-    end
+  class StepAdapters
+    extend Dry::Container::Mixin
   end
 end
+
+require "call_sheet/step_adapters/map"
+require "call_sheet/step_adapters/raw"
+require "call_sheet/step_adapters/tee"
+require "call_sheet/step_adapters/try"
